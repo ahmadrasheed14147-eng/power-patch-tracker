@@ -10,13 +10,28 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminRouteImport } from './routes/admin'
+import { Route as ConsumerRouteImport } from './routes/consumer'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as RegisterRouteImport } from './routes/register'
+import { Route as WorkerRouteImport } from './routes/worker'
+import { Route as ConsumerIndexRouteImport } from './routes/consumer.index'
+import { Route as ConsumerComplaintsRouteImport } from './routes/consumer.complaints'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConsumerRoute = ConsumerRouteImport.update({
+  id: '/consumer',
+  path: '/consumer',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
@@ -34,39 +49,98 @@ const RegisterRoute = RegisterRouteImport.update({
   path: '/register',
   getParentRoute: () => rootRouteImport,
 } as any)
+const WorkerRoute = WorkerRouteImport.update({
+  id: '/worker',
+  path: '/worker',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConsumerIndexRoute = ConsumerIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ConsumerRoute,
+} as any)
+const ConsumerComplaintsRoute = ConsumerComplaintsRouteImport.update({
+  id: '/complaints',
+  path: '/complaints',
+  getParentRoute: () => ConsumerRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
+  '/consumer': typeof ConsumerRouteWithChildren
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/worker': typeof WorkerRoute
+  '/consumer/complaints': typeof ConsumerComplaintsRoute
+  '/consumer/': typeof ConsumerIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/worker': typeof WorkerRoute
+  '/consumer/complaints': typeof ConsumerComplaintsRoute
+  '/consumer': typeof ConsumerIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
+  '/consumer': typeof ConsumerRouteWithChildren
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/worker': typeof WorkerRoute
+  '/consumer/complaints': typeof ConsumerComplaintsRoute
+  '/consumer/': typeof ConsumerIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/forgot-password' | '/login' | '/register'
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/consumer'
+    | '/forgot-password'
+    | '/login'
+    | '/register'
+    | '/worker'
+    | '/consumer/complaints'
+    | '/consumer/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/forgot-password' | '/login' | '/register'
-  id: '__root__' | '/' | '/forgot-password' | '/login' | '/register'
+  to:
+    | '/'
+    | '/admin'
+    | '/forgot-password'
+    | '/login'
+    | '/register'
+    | '/worker'
+    | '/consumer/complaints'
+    | '/consumer'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/consumer'
+    | '/forgot-password'
+    | '/login'
+    | '/register'
+    | '/worker'
+    | '/consumer/complaints'
+    | '/consumer/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRoute
+  ConsumerRoute: typeof ConsumerRouteWithChildren
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   LoginRoute: typeof LoginRoute
   RegisterRoute: typeof RegisterRoute
+  WorkerRoute: typeof WorkerRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -76,6 +150,20 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/consumer': {
+      id: '/consumer'
+      path: '/consumer'
+      fullPath: '/consumer'
+      preLoaderRoute: typeof ConsumerRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/forgot-password': {
@@ -99,14 +187,52 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RegisterRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/worker': {
+      id: '/worker'
+      path: '/worker'
+      fullPath: '/worker'
+      preLoaderRoute: typeof WorkerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/consumer/': {
+      id: '/consumer/'
+      path: '/'
+      fullPath: '/consumer/'
+      preLoaderRoute: typeof ConsumerIndexRouteImport
+      parentRoute: typeof ConsumerRoute
+    }
+    '/consumer/complaints': {
+      id: '/consumer/complaints'
+      path: '/complaints'
+      fullPath: '/consumer/complaints'
+      preLoaderRoute: typeof ConsumerComplaintsRouteImport
+      parentRoute: typeof ConsumerRoute
+    }
   }
 }
 
+interface ConsumerRouteChildren {
+  ConsumerComplaintsRoute: typeof ConsumerComplaintsRoute
+  ConsumerIndexRoute: typeof ConsumerIndexRoute
+}
+
+const ConsumerRouteChildren: ConsumerRouteChildren = {
+  ConsumerComplaintsRoute: ConsumerComplaintsRoute,
+  ConsumerIndexRoute: ConsumerIndexRoute,
+}
+
+const ConsumerRouteWithChildren = ConsumerRoute._addFileChildren(
+  ConsumerRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRoute,
+  ConsumerRoute: ConsumerRouteWithChildren,
   ForgotPasswordRoute: ForgotPasswordRoute,
   LoginRoute: LoginRoute,
   RegisterRoute: RegisterRoute,
+  WorkerRoute: WorkerRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
