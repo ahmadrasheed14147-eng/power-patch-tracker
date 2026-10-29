@@ -16,8 +16,10 @@ import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as WorkerRouteImport } from './routes/worker'
+import { Route as ComplaintsIdRouteImport } from './routes/complaints.$id'
 import { Route as ConsumerIndexRouteImport } from './routes/consumer.index'
 import { Route as ConsumerComplaintsRouteImport } from './routes/consumer.complaints'
+import { Route as ConsumerSubmitRouteImport } from './routes/consumer.submit'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -54,6 +56,11 @@ const WorkerRoute = WorkerRouteImport.update({
   path: '/worker',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ComplaintsIdRoute = ComplaintsIdRouteImport.update({
+  id: '/complaints/$id',
+  path: '/complaints/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ConsumerIndexRoute = ConsumerIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -62,6 +69,11 @@ const ConsumerIndexRoute = ConsumerIndexRouteImport.update({
 const ConsumerComplaintsRoute = ConsumerComplaintsRouteImport.update({
   id: '/complaints',
   path: '/complaints',
+  getParentRoute: () => ConsumerRoute,
+} as any)
+const ConsumerSubmitRoute = ConsumerSubmitRouteImport.update({
+  id: '/submit',
+  path: '/submit',
   getParentRoute: () => ConsumerRoute,
 } as any)
 
@@ -73,7 +85,9 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/worker': typeof WorkerRoute
+  '/complaints/$id': typeof ComplaintsIdRoute
   '/consumer/complaints': typeof ConsumerComplaintsRoute
+  '/consumer/submit': typeof ConsumerSubmitRoute
   '/consumer/': typeof ConsumerIndexRoute
 }
 export interface FileRoutesByTo {
@@ -83,7 +97,9 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/worker': typeof WorkerRoute
+  '/complaints/$id': typeof ComplaintsIdRoute
   '/consumer/complaints': typeof ConsumerComplaintsRoute
+  '/consumer/submit': typeof ConsumerSubmitRoute
   '/consumer': typeof ConsumerIndexRoute
 }
 export interface FileRoutesById {
@@ -95,7 +111,9 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/worker': typeof WorkerRoute
+  '/complaints/$id': typeof ComplaintsIdRoute
   '/consumer/complaints': typeof ConsumerComplaintsRoute
+  '/consumer/submit': typeof ConsumerSubmitRoute
   '/consumer/': typeof ConsumerIndexRoute
 }
 export interface FileRouteTypes {
@@ -108,7 +126,9 @@ export interface FileRouteTypes {
     | '/login'
     | '/register'
     | '/worker'
+    | '/complaints/$id'
     | '/consumer/complaints'
+    | '/consumer/submit'
     | '/consumer/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -118,7 +138,9 @@ export interface FileRouteTypes {
     | '/login'
     | '/register'
     | '/worker'
+    | '/complaints/$id'
     | '/consumer/complaints'
+    | '/consumer/submit'
     | '/consumer'
   id:
     | '__root__'
@@ -129,7 +151,9 @@ export interface FileRouteTypes {
     | '/login'
     | '/register'
     | '/worker'
+    | '/complaints/$id'
     | '/consumer/complaints'
+    | '/consumer/submit'
     | '/consumer/'
   fileRoutesById: FileRoutesById
 }
@@ -141,6 +165,7 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   RegisterRoute: typeof RegisterRoute
   WorkerRoute: typeof WorkerRoute
+  ComplaintsIdRoute: typeof ComplaintsIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -194,6 +219,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WorkerRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/complaints/$id': {
+      id: '/complaints/$id'
+      path: '/complaints/$id'
+      fullPath: '/complaints/$id'
+      preLoaderRoute: typeof ComplaintsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/consumer/': {
       id: '/consumer/'
       path: '/'
@@ -208,16 +240,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ConsumerComplaintsRouteImport
       parentRoute: typeof ConsumerRoute
     }
+    '/consumer/submit': {
+      id: '/consumer/submit'
+      path: '/submit'
+      fullPath: '/consumer/submit'
+      preLoaderRoute: typeof ConsumerSubmitRouteImport
+      parentRoute: typeof ConsumerRoute
+    }
   }
 }
 
 interface ConsumerRouteChildren {
   ConsumerComplaintsRoute: typeof ConsumerComplaintsRoute
+  ConsumerSubmitRoute: typeof ConsumerSubmitRoute
   ConsumerIndexRoute: typeof ConsumerIndexRoute
 }
 
 const ConsumerRouteChildren: ConsumerRouteChildren = {
   ConsumerComplaintsRoute: ConsumerComplaintsRoute,
+  ConsumerSubmitRoute: ConsumerSubmitRoute,
   ConsumerIndexRoute: ConsumerIndexRoute,
 }
 
@@ -233,6 +274,7 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   RegisterRoute: RegisterRoute,
   WorkerRoute: WorkerRoute,
+  ComplaintsIdRoute: ComplaintsIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
