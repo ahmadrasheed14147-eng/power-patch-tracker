@@ -14,12 +14,21 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as ConsumerRouteImport } from './routes/consumer'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as NotificationsRouteImport } from './routes/notifications'
+import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as WorkerRouteImport } from './routes/worker'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminAnalyticsRouteImport } from './routes/admin.analytics'
+import { Route as AdminComplaintsRouteImport } from './routes/admin.complaints'
+import { Route as AdminDuplicatesRouteImport } from './routes/admin.duplicates'
+import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as ComplaintsIdRouteImport } from './routes/complaints.$id'
 import { Route as ConsumerIndexRouteImport } from './routes/consumer.index'
 import { Route as ConsumerComplaintsRouteImport } from './routes/consumer.complaints'
 import { Route as ConsumerSubmitRouteImport } from './routes/consumer.submit'
+import { Route as WorkerIndexRouteImport } from './routes/worker.index'
+import { Route as WorkerTasksRouteImport } from './routes/worker.tasks'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -46,6 +55,16 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const NotificationsRoute = NotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RegisterRoute = RegisterRouteImport.update({
   id: '/register',
   path: '/register',
@@ -55,6 +74,31 @@ const WorkerRoute = WorkerRouteImport.update({
   id: '/worker',
   path: '/worker',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminAnalyticsRoute = AdminAnalyticsRouteImport.update({
+  id: '/analytics',
+  path: '/analytics',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminComplaintsRoute = AdminComplaintsRouteImport.update({
+  id: '/complaints',
+  path: '/complaints',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminDuplicatesRoute = AdminDuplicatesRouteImport.update({
+  id: '/duplicates',
+  path: '/duplicates',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminUsersRoute = AdminUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => AdminRoute,
 } as any)
 const ComplaintsIdRoute = ComplaintsIdRouteImport.update({
   id: '/complaints/$id',
@@ -76,45 +120,80 @@ const ConsumerSubmitRoute = ConsumerSubmitRouteImport.update({
   path: '/submit',
   getParentRoute: () => ConsumerRoute,
 } as any)
+const WorkerIndexRoute = WorkerIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => WorkerRoute,
+} as any)
+const WorkerTasksRoute = WorkerTasksRouteImport.update({
+  id: '/tasks',
+  path: '/tasks',
+  getParentRoute: () => WorkerRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/consumer': typeof ConsumerRouteWithChildren
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
+  '/notifications': typeof NotificationsRoute
+  '/profile': typeof ProfileRoute
   '/register': typeof RegisterRoute
-  '/worker': typeof WorkerRoute
+  '/worker': typeof WorkerRouteWithChildren
+  '/admin/analytics': typeof AdminAnalyticsRoute
+  '/admin/complaints': typeof AdminComplaintsRoute
+  '/admin/duplicates': typeof AdminDuplicatesRoute
+  '/admin/users': typeof AdminUsersRoute
   '/complaints/$id': typeof ComplaintsIdRoute
   '/consumer/complaints': typeof ConsumerComplaintsRoute
   '/consumer/submit': typeof ConsumerSubmitRoute
+  '/worker/tasks': typeof WorkerTasksRoute
+  '/admin/': typeof AdminIndexRoute
   '/consumer/': typeof ConsumerIndexRoute
+  '/worker/': typeof WorkerIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
+  '/notifications': typeof NotificationsRoute
+  '/profile': typeof ProfileRoute
   '/register': typeof RegisterRoute
-  '/worker': typeof WorkerRoute
+  '/admin/analytics': typeof AdminAnalyticsRoute
+  '/admin/complaints': typeof AdminComplaintsRoute
+  '/admin/duplicates': typeof AdminDuplicatesRoute
+  '/admin/users': typeof AdminUsersRoute
   '/complaints/$id': typeof ComplaintsIdRoute
   '/consumer/complaints': typeof ConsumerComplaintsRoute
   '/consumer/submit': typeof ConsumerSubmitRoute
+  '/worker/tasks': typeof WorkerTasksRoute
+  '/admin': typeof AdminIndexRoute
   '/consumer': typeof ConsumerIndexRoute
+  '/worker': typeof WorkerIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/consumer': typeof ConsumerRouteWithChildren
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
+  '/notifications': typeof NotificationsRoute
+  '/profile': typeof ProfileRoute
   '/register': typeof RegisterRoute
-  '/worker': typeof WorkerRoute
+  '/worker': typeof WorkerRouteWithChildren
+  '/admin/analytics': typeof AdminAnalyticsRoute
+  '/admin/complaints': typeof AdminComplaintsRoute
+  '/admin/duplicates': typeof AdminDuplicatesRoute
+  '/admin/users': typeof AdminUsersRoute
   '/complaints/$id': typeof ComplaintsIdRoute
   '/consumer/complaints': typeof ConsumerComplaintsRoute
   '/consumer/submit': typeof ConsumerSubmitRoute
+  '/worker/tasks': typeof WorkerTasksRoute
+  '/admin/': typeof AdminIndexRoute
   '/consumer/': typeof ConsumerIndexRoute
+  '/worker/': typeof WorkerIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -124,24 +203,40 @@ export interface FileRouteTypes {
     | '/consumer'
     | '/forgot-password'
     | '/login'
+    | '/notifications'
+    | '/profile'
     | '/register'
     | '/worker'
+    | '/admin/analytics'
+    | '/admin/complaints'
+    | '/admin/duplicates'
+    | '/admin/users'
     | '/complaints/$id'
     | '/consumer/complaints'
     | '/consumer/submit'
+    | '/worker/tasks'
+    | '/admin/'
     | '/consumer/'
+    | '/worker/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/admin'
     | '/forgot-password'
     | '/login'
+    | '/notifications'
+    | '/profile'
     | '/register'
-    | '/worker'
+    | '/admin/analytics'
+    | '/admin/complaints'
+    | '/admin/duplicates'
+    | '/admin/users'
     | '/complaints/$id'
     | '/consumer/complaints'
     | '/consumer/submit'
+    | '/worker/tasks'
+    | '/admin'
     | '/consumer'
+    | '/worker'
   id:
     | '__root__'
     | '/'
@@ -149,22 +244,33 @@ export interface FileRouteTypes {
     | '/consumer'
     | '/forgot-password'
     | '/login'
+    | '/notifications'
+    | '/profile'
     | '/register'
     | '/worker'
+    | '/admin/analytics'
+    | '/admin/complaints'
+    | '/admin/duplicates'
+    | '/admin/users'
     | '/complaints/$id'
     | '/consumer/complaints'
     | '/consumer/submit'
+    | '/worker/tasks'
+    | '/admin/'
     | '/consumer/'
+    | '/worker/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AdminRoute: typeof AdminRoute
+  AdminRoute: typeof AdminRouteWithChildren
   ConsumerRoute: typeof ConsumerRouteWithChildren
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   LoginRoute: typeof LoginRoute
+  NotificationsRoute: typeof NotificationsRoute
+  ProfileRoute: typeof ProfileRoute
   RegisterRoute: typeof RegisterRoute
-  WorkerRoute: typeof WorkerRoute
+  WorkerRoute: typeof WorkerRouteWithChildren
   ComplaintsIdRoute: typeof ComplaintsIdRoute
 }
 
@@ -205,6 +311,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/notifications': {
+      id: '/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof NotificationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/register': {
       id: '/register'
       path: '/register'
@@ -218,6 +338,41 @@ declare module '@tanstack/react-router' {
       fullPath: '/worker'
       preLoaderRoute: typeof WorkerRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/analytics': {
+      id: '/admin/analytics'
+      path: '/analytics'
+      fullPath: '/admin/analytics'
+      preLoaderRoute: typeof AdminAnalyticsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/complaints': {
+      id: '/admin/complaints'
+      path: '/complaints'
+      fullPath: '/admin/complaints'
+      preLoaderRoute: typeof AdminComplaintsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/duplicates': {
+      id: '/admin/duplicates'
+      path: '/duplicates'
+      fullPath: '/admin/duplicates'
+      preLoaderRoute: typeof AdminDuplicatesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/users': {
+      id: '/admin/users'
+      path: '/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AdminUsersRouteImport
+      parentRoute: typeof AdminRoute
     }
     '/complaints/$id': {
       id: '/complaints/$id'
@@ -247,8 +402,40 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ConsumerSubmitRouteImport
       parentRoute: typeof ConsumerRoute
     }
+    '/worker/': {
+      id: '/worker/'
+      path: '/'
+      fullPath: '/worker/'
+      preLoaderRoute: typeof WorkerIndexRouteImport
+      parentRoute: typeof WorkerRoute
+    }
+    '/worker/tasks': {
+      id: '/worker/tasks'
+      path: '/tasks'
+      fullPath: '/worker/tasks'
+      preLoaderRoute: typeof WorkerTasksRouteImport
+      parentRoute: typeof WorkerRoute
+    }
   }
 }
+
+interface AdminRouteChildren {
+  AdminAnalyticsRoute: typeof AdminAnalyticsRoute
+  AdminComplaintsRoute: typeof AdminComplaintsRoute
+  AdminDuplicatesRoute: typeof AdminDuplicatesRoute
+  AdminUsersRoute: typeof AdminUsersRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminAnalyticsRoute: AdminAnalyticsRoute,
+  AdminComplaintsRoute: AdminComplaintsRoute,
+  AdminDuplicatesRoute: AdminDuplicatesRoute,
+  AdminUsersRoute: AdminUsersRoute,
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 interface ConsumerRouteChildren {
   ConsumerComplaintsRoute: typeof ConsumerComplaintsRoute
@@ -266,14 +453,29 @@ const ConsumerRouteWithChildren = ConsumerRoute._addFileChildren(
   ConsumerRouteChildren,
 )
 
+interface WorkerRouteChildren {
+  WorkerTasksRoute: typeof WorkerTasksRoute
+  WorkerIndexRoute: typeof WorkerIndexRoute
+}
+
+const WorkerRouteChildren: WorkerRouteChildren = {
+  WorkerTasksRoute: WorkerTasksRoute,
+  WorkerIndexRoute: WorkerIndexRoute,
+}
+
+const WorkerRouteWithChildren =
+  WorkerRoute._addFileChildren(WorkerRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AdminRoute: AdminRoute,
+  AdminRoute: AdminRouteWithChildren,
   ConsumerRoute: ConsumerRouteWithChildren,
   ForgotPasswordRoute: ForgotPasswordRoute,
   LoginRoute: LoginRoute,
+  NotificationsRoute: NotificationsRoute,
+  ProfileRoute: ProfileRoute,
   RegisterRoute: RegisterRoute,
-  WorkerRoute: WorkerRoute,
+  WorkerRoute: WorkerRouteWithChildren,
   ComplaintsIdRoute: ComplaintsIdRoute,
 }
 export const routeTree = rootRouteImport
